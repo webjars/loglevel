@@ -5,28 +5,20 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>9</version>
+        <version>7</version>
     </parent>
 
     <packaging>jar</packaging>
     <groupId>org.webjars</groupId>
     <artifactId>loglevel</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
-    <name>loglevel</name>
-    <description>WebJar for Loglevel</description>
+    <version>0.6.0-SNAPSHOT</version>
+    <name>Loglevel</name>
+    <description>WebJar for loglevel</description>
     <url>http://webjars.org</url>
-
-    <developers>
-        <developer>
-            <id>cowwoc</id>
-            <name>Gili Tzabari</name>
-            <email>cowwoc@bbs.darktech.org</email>
-        </developer>
-    </developers>
 
     <licenses>
         <license>
-            <name>The MIT license</name>
+            <name>MIT</name>
             <url>https://github.com/pimterry/loglevel/blob/master/LICENSE-MIT</url>
             <distribution>repo</distribution>
         </license>
@@ -39,11 +31,25 @@
         <tag>HEAD</tag>
     </scm>
 
+    <developers>
+        <developer>
+            <id>jamesward</id>
+            <name>James Ward</name>
+            <email>james@jamesward.org</email>
+        </developer>
+         <developer>
+            <id>cowwoc</id>
+            <name>Gili Tzabari</name>
+            <email>cowwoc@bbs.darktech.org</email>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <upstream.version>0.5.0</upstream.version>
-        <upstream.url>https://raw.github.com/pimterry/loglevel/${upstream.version}</upstream.url>
-        <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${upstream.version}</destDir>
+        <upstreamVersion>0.6.0</upstreamVersion>
+        <upstream.url>https://github.com/pimterry/loglevel</upstream.url>
+        <extractDir>${project.build.directory}/loglevel-${upstreamVersion}</extractDir>
+        <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${upstreamVersion}</destDir>
     </properties>
 
     <build>
@@ -54,38 +60,65 @@
                 <version>1.0-beta-4</version>
                 <executions>
                     <execution>
-                        <id>download-full-js</id>
+                        <id>download-js</id>
                         <phase>process-resources</phase>
-                        <goals>
-                            <goal>download-single</goal>
-                        </goals>
+                        <goals><goal>download-single</goal></goals>
                         <configuration>
-                            <url>${upstream.url}</url>
-                            <fromFile>dist/loglevel.js</fromFile>
-                            <toDir>${destDir}</toDir>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-min-js</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>download-single</goal>
-                        </goals>
-                        <configuration>
-                            <url>${upstream.url}</url>
-                            <fromFile>dist/loglevel.min.js</fromFile>
-                            <toDir>${destDir}</toDir>
+                            <url>${upstream.url}/archive</url>
+                            <fromFile>${upstreamVersion}.zip</fromFile>
+                            <toDir>${project.build.directory}</toDir>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="unzip archive" />
+                                <unzip src="${project.build.directory}/${upstreamVersion}.zip" dest="${project.build.directory}" />
 
+                                <echo message="moving resources" />
+                                <move todir="${destDir}">
+                                    <fileset dir="${project.build.directory}/loglevel-${upstreamVersion}/dist"  />
+                                </move>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.2</version>
+                <version>2.5</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${destDir}</targetPath>
+            </resource>
+        </resources>
     </build>
 
 </project>
