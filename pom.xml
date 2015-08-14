@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <groupId>org.webjars</groupId>
     <artifactId>loglevel</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.2-SNAPSHOT</version>
     <name>Loglevel</name>
     <description>WebJar for loglevel</description>
     <url>http://webjars.org</url>
@@ -28,7 +28,7 @@
         <url>http://github.com/webjars/loglevel</url>
         <connection>scm:git:https://github.com/webjars/loglevel.git</connection>
         <developerConnection>scm:git:https://github.com/webjars/loglevel.git</developerConnection>
-        <tag>loglevel-1.3.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
