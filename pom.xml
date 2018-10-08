@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <groupId>org.webjars</groupId>
     <artifactId>loglevel</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.6.1-SNAPSHOT</version>
     <name>Loglevel</name>
     <description>WebJar for loglevel</description>
     <url>http://webjars.org</url>
@@ -46,7 +46,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <upstreamVersion>1.4.0</upstreamVersion>
+        <upstreamVersion>1.6.1</upstreamVersion>
         <upstream.url>https://github.com/pimterry/loglevel</upstream.url>
         <extractDir>${project.build.directory}/loglevel-${upstreamVersion}</extractDir>
         <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${upstreamVersion}</destDir>
@@ -65,7 +65,7 @@
                         <goals><goal>download-single</goal></goals>
                         <configuration>
                             <url>${upstream.url}/archive</url>
-                            <fromFile>${upstreamVersion}.zip</fromFile>
+                            <fromFile>v${upstreamVersion}.zip</fromFile>
                             <toDir>${project.build.directory}</toDir>
                         </configuration>
                     </execution>
@@ -83,7 +83,7 @@
                         <configuration>
                             <target>
                                 <echo message="unzip archive" />
-                                <unzip src="${project.build.directory}/${upstreamVersion}.zip" dest="${project.build.directory}" />
+                                <unzip src="${project.build.directory}/v${upstreamVersion}.zip" dest="${project.build.directory}" />
 
                                 <echo message="moving resources" />
                                 <move todir="${destDir}">
